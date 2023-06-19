@@ -21,6 +21,8 @@ const alchemy = new Alchemy(settings)
 function App() {
   const [blockNumber, setBlockNumber] = useState()
   const [blockWithTransaction, setBlockWithTransaction] = useState()
+  const [transactionReceipt, setTransactionReceipt] = useState()
+  const [txHash, setTxHash] = useState()
 
   useEffect(() => {
     async function getBlockNumber() {
@@ -32,38 +34,103 @@ function App() {
       setBlockWithTransaction(block)
     }
 
+    async function getTransactionReceipt(blockWithTransaction) {
+      const txReceipt = await getTransactionReceipt(
+        blockWithTransaction.transactions.blockHash
+      )
+      setTransactionReceipt(txReceipt)
+    }
+
     getBlockNumber()
     getBlockWithTransactions(blockNumber)
-    // console.log(blockWithTransaction.transactions)
-  }, [])
-  // console.log(blockWithTransaction.transactions)
+    // getTransactionReceipt(blockWithTransaction)
+  }, [blockNumber])
+  // let currentBlock
+  // if (currentBlock) {
+
+  // }
   let transaction
   if (blockWithTransaction && blockWithTransaction.transactions) {
     transaction = blockWithTransaction.transactions.map((blox, i) => {
       console.log(blox.blockHash)
       return (
         <div key={i}>
-          Block With Transaction:
-          <div key={i}>
-            Transaction Hash:{" "}
-            {blox.blockHash.slice(0, 8) + "..." + blox.blockHash.slice(-8)}
-          </div>
-          <div>Block: {blox.blockNumber}</div>
-          <div>From: {blox.from}</div>
-          <div>To: {blox.to}</div>
-          <div>Value: {parseInt(blox.value)}</div>
-          <div>Transaction Fee: {parseInt(blox.maxFeePerGas)}</div>
-          <div>Gas Price: {parseInt(blox.gasPrice)}</div>
+          <span className="fields">Transaction Hash: </span>
+          {blox.hash.slice(0, 8) + "..." + blox.hash.slice(-8)}
         </div>
+        /* <div>
+            <span className="fields">Block: </span>
+            {blox.blockNumber}
+          </div>
+          <div>
+            <span className="fields">From: </span>
+            {blox.from}
+          </div>
+          <div>
+            <span className="fields">To: </span>
+            {blox.to}
+          </div>
+          <div>
+            <span className="fields">Value: </span>
+            {parseInt(blox.value)} wei
+          </div>
+          <div>
+            <span className="fields">Transaction Fee: </span>
+            {parseInt(blox.maxFeePerGas)} wei
+          </div>
+          <div>
+            <span className="fields">Gas Price: </span>
+            {parseInt(blox.gasPrice)} wei */
+        /* </div> */
       )
     })
-    console.log(blockWithTransaction)
+    // let txHash = transaction.
+    console.log("here", blockWithTransaction)
   }
   return (
     <>
-      <div className="App">Block Number: {blockNumber}</div>
+      <div className="App">
+        <div>
+          <span className="fields">Block Number: {blockNumber}</span>
+        </div>
+        {blockWithTransaction ? (
+          <>
+            <div>
+              <span className="fields">Hash: </span>
+              {blockWithTransaction.hash.slice(0, 8) +
+                "..." +
+                blockWithTransaction.hash.slice(-8)}
+            </div>
+            <div>
+              <span className="fields">Gas Used: </span>
+              {parseInt(blockWithTransaction.gasUsed)}
+            </div>
+            <div>
+              <span className="fields">Miner: </span>
+              {blockWithTransaction.miner}
+            </div>
+            <div>
+              <span className="fields">Nonce: </span>
+              {blockWithTransaction.nonce}
+            </div>
+            <div>
+              <span className="fields">Timestamp: </span>
+              {blockWithTransaction.timestamp}
+            </div>
+          </>
+        ) : null}
+      </div>
 
-      <div className="App">{transaction}</div>
+      <div className="BlockWithTransaction">
+        <div className="App2">
+          Block With Transaction:
+          {transaction}
+        </div>
+      </div>
+
+      <div className="oneTransaction">
+        <div className="App3">Transaction:</div>
+      </div>
     </>
   )
 }
