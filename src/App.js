@@ -23,6 +23,7 @@ function App() {
   const [blockWithTransaction, setBlockWithTransaction] = useState()
   const [transactionReceipt, setTransactionReceipt] = useState()
   const [txHash, setTxHash] = useState()
+  const [index, setIndex] = useState(0)
 
   useEffect(() => {
     async function getBlockNumber() {
@@ -45,18 +46,25 @@ function App() {
     getBlockWithTransactions(blockNumber)
     // getTransactionReceipt(blockWithTransaction)
   }, [blockNumber])
-  // let currentBlock
-  // if (currentBlock) {
 
-  // }
+  const handleClick = (i) => {
+    setIndex(i)
+    // if (ele - 1 === blockWithTransaction.transactions[0]) {
+    //   return "hi"
+    // }
+    console.log("here", index)
+  }
+
   let transaction
   if (blockWithTransaction && blockWithTransaction.transactions) {
     transaction = blockWithTransaction.transactions.map((blox, i) => {
       console.log(blox.blockHash)
       return (
         <div key={i}>
-          <span className="fields">Transaction Hash: </span>
-          {blox.hash.slice(0, 8) + "..." + blox.hash.slice(-8)}
+          <span className={i === index ? "field" : ""}>Transaction Hash: </span>
+          <button onClick={handleClick} id={(i += 1)}>
+            {blox.hash.slice(0, 8) + "..." + blox.hash.slice(-8)}
+          </button>
         </div>
         /* <div>
             <span className="fields">Block: </span>
@@ -84,8 +92,6 @@ function App() {
         /* </div> */
       )
     })
-    // let txHash = transaction.
-    console.log("here", blockWithTransaction)
   }
   return (
     <>
@@ -96,10 +102,12 @@ function App() {
         {blockWithTransaction ? (
           <>
             <div>
-              <span className="fields">Hash: </span>
-              {blockWithTransaction.hash.slice(0, 8) +
-                "..." +
-                blockWithTransaction.hash.slice(-8)}
+              <a onClick={handleClick}>
+                <span className="fields">Hash: </span>
+                {blockWithTransaction.hash.slice(0, 8) +
+                  "..." +
+                  blockWithTransaction.hash.slice(-8)}
+              </a>
             </div>
             <div>
               <span className="fields">Gas Used: </span>
@@ -130,6 +138,8 @@ function App() {
 
       <div className="oneTransaction">
         <div className="App3">Transaction:</div>
+        {/* {id - 1} */}
+        Hi
       </div>
     </>
   )
