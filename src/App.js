@@ -23,7 +23,7 @@ function App() {
   const [blockWithTransaction, setBlockWithTransaction] = useState()
   const [transactionReceipt, setTransactionReceipt] = useState()
   const [txHash, setTxHash] = useState()
-  const [index, setIndex] = useState(0)
+  const [index, setIndex] = useState()
 
   useEffect(() => {
     async function getBlockNumber() {
@@ -41,16 +41,15 @@ function App() {
       )
       setTransactionReceipt(txReceipt)
     }
-
+    console.log("useEffect", index)
     getBlockNumber()
     getBlockWithTransactions(blockNumber)
     // getTransactionReceipt(blockWithTransaction)
-  }, [blockNumber])
+  }, [index])
 
-  const handleClick = (i) => {
-    setIndex(i)
-    // if (ele - 1 === blockWithTransaction.transactions[0]) {
-    //   return "hi"
+  const handleClick = async (i) => {
+    // if (i === index) {
+    const result = await setIndex(i)
     // }
     console.log("here", index)
   }
@@ -61,8 +60,8 @@ function App() {
       console.log(blox.blockHash)
       return (
         <div key={i}>
-          <span className={i === index ? "field" : ""}>Transaction Hash: </span>
-          <button onClick={handleClick} id={(i += 1)}>
+          <span className="field">Transaction Hash: </span>
+          <button onClick={() => handleClick(i)} id={i}>
             {blox.hash.slice(0, 8) + "..." + blox.hash.slice(-8)}
           </button>
         </div>
