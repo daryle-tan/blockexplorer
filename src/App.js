@@ -43,16 +43,19 @@ function App() {
         let tx = blockWithTransaction.transactions[index].hash
         const txReceipt = await alchemy.core.getTransactionReceipt(tx)
         setTransactionReceipt(txReceipt)
-        setTimeout(() => {
-          console.log("tx", txReceipt)
-        }, 1000)
+        // setTimeout(() => {
+        console.log("tx", txReceipt)
+        // }, 1000)
       }
     }
-    console.log("useEffect", blockWithTransaction.transactions)
-    console.log("useEffect", blockWithTransaction.transactions[index].blockHash)
-    // console.log("useEffect", blockWithTransaction.transactions[index])
-    console.log("useEffect", index)
-    console.log("txReceipt", transactionReceipt)
+    // console.log("useEffect1", blockWithTransaction.transactions)
+    // console.log(
+    //   "useEffect2",
+    //   blockWithTransaction.transactions[index].blockHash
+    // )
+    // console.log("useEffect3", blockWithTransaction.transactions[index])
+    // console.log("useEffect4", index)
+    // console.log("txReceipt5", transactionReceipt)
     getBlockNumbers()
     getBlockWithTransaction(blockNumber)
     getTransactionReceipts(transactionReceipt)
@@ -61,6 +64,7 @@ function App() {
   const handleClick = (i) => {
     if (i !== index) {
       setIndex(i)
+      setTransactionReceipt(transactionReceipt)
     }
     setTimeout(() => {
       console.log("here", i)
@@ -70,7 +74,6 @@ function App() {
   let transaction
   if (blockWithTransaction && blockWithTransaction.transactions) {
     transaction = blockWithTransaction.transactions.map((blox, i) => {
-      // console.log(blox.blockHash)
       return (
         <div key={i}>
           <span className="field">Transaction Hash: </span>
@@ -78,33 +81,10 @@ function App() {
             {blox.hash.slice(0, 8) + "..." + blox.hash.slice(-8)}
           </button>
         </div>
-        /* <div>
-            <span className="fields">Block: </span>
-            {blox.blockNumber}
-          </div>
-          <div>
-            <span className="fields">From: </span>
-            {blox.from}
-          </div>
-          <div>
-            <span className="fields">To: </span>
-            {blox.to}
-          </div>
-          <div>
-            <span className="fields">Value: </span>
-            {parseInt(blox.value)} wei
-          </div>
-          <div>
-            <span className="fields">Transaction Fee: </span>
-            {parseInt(blox.maxFeePerGas)} wei
-          </div>
-          <div>
-            <span className="fields">Gas Price: </span>
-            {parseInt(blox.gasPrice)} wei */
-        /* </div> */
       )
     })
   }
+
   return (
     <>
       <div className="App">
@@ -149,9 +129,35 @@ function App() {
       </div>
 
       <div className="oneTransaction">
-        <div className="App3">Transaction:</div>
-        {/* {id - 1} */}
-        Hi
+        <div className="App3">Transaction Details:</div>
+        {transactionReceipt ? (
+          <>
+            <div>
+              <span className="fields">Block Number: </span>
+              {transactionReceipt.blockNumber}
+            </div>
+            <div>
+              <span className="fields">From: </span>
+              {transactionReceipt.from}
+            </div>
+            <div>
+              <span className="fields">To: </span>
+              {transactionReceipt.to}
+            </div>
+            <div>
+              <span className="fields">Status: </span>
+              {transactionReceipt.status}
+            </div>
+            <div>
+              <span className="fields">Gas Used: </span>
+              {parseInt(transactionReceipt.gasUsed)} wei
+            </div>
+            <div>
+              <span className="fields">Gas Price: </span>
+              {parseInt(transactionReceipt.effectiveGasPrice)} wei
+            </div>
+          </>
+        ) : null}
       </div>
     </>
   )
