@@ -26,38 +26,51 @@ function App() {
   const [index, setIndex] = useState()
 
   useEffect(() => {
-    async function getBlockNumber() {
+    async function getBlockNumbers() {
       setBlockNumber(await alchemy.core.getBlockNumber())
     }
 
-    async function getBlockWithTransactions(blockNumber) {
+    async function getBlockWithTransaction(blockNumber) {
       const block = await alchemy.core.getBlockWithTransactions(blockNumber)
       setBlockWithTransaction(block)
     }
 
-    async function getTransactionReceipt(blockWithTransaction) {
-      const txReceipt = await getTransactionReceipt(
-        blockWithTransaction.transactions.blockHash
-      )
-      setTransactionReceipt(txReceipt)
+    async function getTransactionReceipts(transactionReceipt) {
+      if (
+        blockWithTransaction &&
+        blockWithTransaction.transactions[index].blockHash
+      ) {
+        let tx = blockWithTransaction.transactions[index].hash
+        const txReceipt = await alchemy.core.getTransactionReceipt(tx)
+        setTransactionReceipt(txReceipt)
+        setTimeout(() => {
+          console.log("tx", txReceipt)
+        }, 1000)
+      }
     }
+    console.log("useEffect", blockWithTransaction.transactions)
+    console.log("useEffect", blockWithTransaction.transactions[index].blockHash)
+    // console.log("useEffect", blockWithTransaction.transactions[index])
     console.log("useEffect", index)
-    getBlockNumber()
-    getBlockWithTransactions(blockNumber)
-    // getTransactionReceipt(blockWithTransaction)
-  }, [index])
+    console.log("txReceipt", transactionReceipt)
+    getBlockNumbers()
+    getBlockWithTransaction(blockNumber)
+    getTransactionReceipts(transactionReceipt)
+  }, [blockNumber])
 
-  const handleClick = async (i) => {
-    // if (i === index) {
-    const result = await setIndex(i)
-    // }
-    console.log("here", index)
+  const handleClick = (i) => {
+    if (i !== index) {
+      setIndex(i)
+    }
+    setTimeout(() => {
+      console.log("here", i)
+    }, 100)
   }
 
   let transaction
   if (blockWithTransaction && blockWithTransaction.transactions) {
     transaction = blockWithTransaction.transactions.map((blox, i) => {
-      console.log(blox.blockHash)
+      // console.log(blox.blockHash)
       return (
         <div key={i}>
           <span className="field">Transaction Hash: </span>
@@ -101,12 +114,12 @@ function App() {
         {blockWithTransaction ? (
           <>
             <div>
-              <a onClick={handleClick}>
-                <span className="fields">Hash: </span>
-                {blockWithTransaction.hash.slice(0, 8) +
-                  "..." +
-                  blockWithTransaction.hash.slice(-8)}
-              </a>
+              {/* <a onClick={handleClick}> */}
+              <span className="fields">Hash: </span>
+              {blockWithTransaction.hash.slice(0, 8) +
+                "..." +
+                blockWithTransaction.hash.slice(-8)}
+              {/* </a> */}
             </div>
             <div>
               <span className="fields">Gas Used: </span>
