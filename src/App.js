@@ -20,55 +20,47 @@ const alchemy = new Alchemy(settings)
 
 function App() {
   const [blockNumber, setBlockNumber] = useState()
-  const [blockWithTransaction, setBlockWithTransaction] = useState()
+  const [blockWithTransaction, setBlockWithTransaction] = useState("")
   const [transactionReceipt, setTransactionReceipt] = useState()
-  const [txHash, setTxHash] = useState()
-  const [index, setIndex] = useState()
+  const [index, setIndex] = useState(0)
 
   useEffect(() => {
     async function getBlockNumbers() {
       setBlockNumber(await alchemy.core.getBlockNumber())
+      // console.log("blockNumber", blockNumber)
     }
 
     async function getBlockWithTransaction(blockNumber) {
       const block = await alchemy.core.getBlockWithTransactions(blockNumber)
       setBlockWithTransaction(block)
     }
-
-    async function getTransactionReceipts(transactionReceipt) {
-      if (
-        blockWithTransaction &&
-        blockWithTransaction.transactions[index].blockHash
-      ) {
-        let tx = blockWithTransaction.transactions[index].hash
-        const txReceipt = await alchemy.core.getTransactionReceipt(tx)
-        setTransactionReceipt(txReceipt)
-        // setTimeout(() => {
-        console.log("tx", txReceipt)
-        // }, 1000)
-      }
-    }
-    // console.log("useEffect1", blockWithTransaction.transactions)
-    // console.log(
-    //   "useEffect2",
-    //   blockWithTransaction.transactions[index].blockHash
-    // )
-    // console.log("useEffect3", blockWithTransaction.transactions[index])
+    // console.log("blockwTx", blockWithTransaction)
     // console.log("useEffect4", index)
     // console.log("txReceipt5", transactionReceipt)
     getBlockNumbers()
     getBlockWithTransaction(blockNumber)
-    getTransactionReceipts(transactionReceipt)
-  }, [blockNumber])
+  }, [])
+
+  async function getTransactionReceipts(transactionReceipt) {
+    if (blockWithTransaction && blockWithTransaction.transactions[index]) {
+      let tx = await blockWithTransaction.transactions[index].hash
+      const txReceipt = await alchemy.core.getTransactionReceipt(tx)
+      setTransactionReceipt(txReceipt)
+      console.log("tx", txReceipt)
+    }
+  }
 
   const handleClick = (i) => {
-    if (i !== index) {
-      setIndex(i)
-      setTransactionReceipt(transactionReceipt)
-    }
+    // if (i !== index) {
+    setIndex(i)
+    getTransactionReceipts(transactionReceipt)
+    setTransactionReceipt(transactionReceipt)
+    // }
     setTimeout(() => {
-      console.log("here", i)
-    }, 100)
+      console.log("here70", i)
+      console.log("here71", transactionReceipt)
+      console.log("here72", blockWithTransaction)
+    }, 1000)
   }
 
   let transaction
@@ -107,7 +99,9 @@ function App() {
             </div>
             <div>
               <span className="fields">Miner: </span>
-              {blockWithTransaction.miner}
+              {blockWithTransaction.miner.slice(0, 8) +
+                "..." +
+                blockWithTransaction.miner.slice(-8)}
             </div>
             <div>
               <span className="fields">Nonce: </span>
