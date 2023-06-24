@@ -1,10 +1,17 @@
-.App {
-  text-align: center;
+:root {
+  --background-color: radial-gradient(
+    rgb(59, 27, 140) 0%,
+    rgb(76, 50, 138) 40%,
+    rgb(93, 77, 136) 100%
+  );
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.App {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content:  flex-start;
+  margin: 0 10px 0 50px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -13,21 +20,94 @@
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
 .App-link {
   color: #61dafb;
 }
 
+body, html, #roots {
+background: var(--background-color);
+margin: 0;
+padding: 0;
+}
+
+.container-logo {
+width: 100%;
+margin: 2rem;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: calc(10px + 2vmin);
+pointer-events: none;
+}
+
+.icon {
+  width: 40%;
+  height: 20vh;
+  min-height: 15vh;
+  border: 1px solid black;
+  border-radius: 10px;  
+  background-color: bisque;
+  opacity: 0.8;
+  /* animation: App-logo-spin infinite 20s linear; */
+}
+
+.subApp {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  gap: 5px;
+  margin-bottom: 2rem;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 10px;
+  width: 230px;
+  height: 170px;
+  background-color: rgb(219,214, 231);
+}
+
+.BlockWithTransaction {
+  border: 1px solid black;
+  border-radius: 10px;
+  overflow-y: scroll;
+  padding: 10px;
+  height: 57.7vh;
+  background-color: rgb(219,214, 231);
+}
+
+.BlockWithTransaction::-webkit-scrollbar {
+  width: 0.5em;
+  
+}
+.BlockWithTransaction::-webkit-scrollbar-track {
+  background-color: blueviolet;
+  border-radius: 0 5px 5px 0;
+}
+
+#container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 10px;
+  /* background  : var(--background-color); */
+}
+
+.txDetailsHeader, .blockNumberHeader, .blockWithTxHeader {
+  text-align: center;
+  font-weight: 700;
+}
+
+.blockWithTxHeader {
+display: flex;
+justify-content: center;
+margin-bottom: 5px;
+}
+
+.fields {
+  font-weight: 420;
+  color: blue;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
